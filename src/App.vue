@@ -7,9 +7,9 @@
         <code v-text="'<el-button>'"></code>
         below
       </p>
-      <el-button>el-button</el-button>
+        <el-button @click="login">Login</el-button>
     </div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
   name: 'app',
   components: {
     HelloWorld
+  },
+  methods: {
+    login() {
+      this.$router.push('/login')
+    }
   }
 }
 </script>
