@@ -9,4 +9,4 @@ install:
 script:
   - npm run build
   - ls -la
-  - aws s3 cp ./dist s3://jinjr/ --recursive
+  - aws s3 cp ./dist s3://jinjr/ --recursive --acl public-read
