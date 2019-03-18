@@ -1,5 +1,7 @@
 # jinjr
 
+[http://jinjr.s3-website-us-east-1.amazonaws.com/#/](演示)
+
 ## Project setup
 ```
 npm install
