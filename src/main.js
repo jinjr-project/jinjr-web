@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App.vue'
+import Vuex from 'vuex'
 import './plugins/element.js'
+import store from './store'
 
 import Login from './components/user/Login.vue'
 import Registration from './components/user/Registration.vue'
@@ -10,6 +12,7 @@ import Collaboration from './components/collaboration/Collaboration'
 
 Vue.config.productionTip = false
 Vue.use(Router)
+Vue.use(Vuex)
 
 const routes = [
   { path: '/', name: 'login', component: Login },
@@ -24,5 +27,6 @@ const router = new Router({
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

@@ -29,7 +29,7 @@
               <h2>Jinjr 面板 冲刺1</h2>
               <div>冲刺描述</div>
           </div>
-          <el-table :data="userstories" :border="true" :show-header="false" size="mini" stripe="true">
+          <el-table :data="userstories" :border="true" :show-header="false" size="mini">
             <el-table-column
               prop="title"
               label="标题"
@@ -59,7 +59,7 @@
               <el-button size="mini">创建冲刺</el-button>
             </el-col>
           </el-row>
-          <el-table :data="userstories" :border="true" :show-header="false" size="mini" stripe="true">
+          <el-table :data="userstories" :border="true" :show-header="false" size="mini">
             <el-table-column
               prop="title"
               label="标题"
@@ -77,9 +77,9 @@
             </el-table-column>
           </el-table>
           <div>
-            <span @click="showCreateIssue()" v-if="!todo.visible">+ 创建事务</span>
+            <span @click="showTodoWriter()" v-if="!todo.visible">+ 创建事务</span>
             <div v-if="todo.visible">
-              <el-input border="false" v-model="todo.title"><el-button slot="suffix">创建</el-button></el-input>
+              <el-input border="false" :value="todo.title" @input="todoChanged"><el-button slot="suffix">创建</el-button></el-input>
             </div>
           </div>
         </div>
@@ -91,6 +91,8 @@
 <style scoped>
 </style>
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
   data() {
     return {
@@ -119,15 +121,22 @@ export default {
           storyPoints: 5
         }
       ],
-    todo: {
-      visible: false,
-      title: ""
-    }
     }
   },
+  computed: mapState({
+    todo: state => state.issue.todo
+  }),
+
+  created() {
+  },
+
   methods: {
-    showCreateIssue() {
-      this.todo.visible = true
+    showTodoWriter() {
+      this.$store.commit("issue/showTodoWriter")
+    },
+
+    todoChanged(text) {
+      this.$store.commit("issue/todoChanged", text)
     }
   }
 }
