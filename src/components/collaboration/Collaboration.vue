@@ -77,7 +77,10 @@
             </el-table-column>
           </el-table>
           <div>
-            <span>+ 创建事务</span>
+            <span @click="showCreateIssue()" v-if="!todo.visible">+ 创建事务</span>
+            <div v-if="todo.visible">
+              <el-input border="false" v-model="todo.title"><el-button slot="suffix">创建</el-button></el-input>
+            </div>
           </div>
         </div>
       </el-col>
@@ -115,7 +118,16 @@ export default {
           sequence: 1,
           storyPoints: 5
         }
-      ]
+      ],
+    todo: {
+      visible: false,
+      title: ""
+    }
+    }
+  },
+  methods: {
+    showCreateIssue() {
+      this.todo.visible = true
     }
   }
 }
