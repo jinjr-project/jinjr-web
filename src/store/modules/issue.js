@@ -1,4 +1,5 @@
 import mock from "./issue_mock"
+import axios from "axios"
 
 const state = {
   todo: {
@@ -21,6 +22,11 @@ const actions = {
       stories: []
     })
     state.commit("setIssues", mock.sprints)
+  },
+
+  async addNewIssue(state, issue) {
+    let response = await axios.post(`http://${process.env.VUE_APP_API_HOST}/issue`, issue)
+    state.commit('addIssue', response.data)
   }
 }
 

@@ -49,7 +49,7 @@
           <div>
             <span @click="showTodoWriter()" v-if="!todo.visible">+ 创建事务</span>
             <div v-if="todo.visible">
-              <el-input border="false" :value="todo.title" @input="todoChanged"><el-button slot="suffix">创建</el-button></el-input>
+              <el-input border="false" :value="todo.title" @input="todoChanged"><el-button slot="suffix" @click="addNewTodo">创建</el-button></el-input>
             </div>
           </div>
         </div>
@@ -87,6 +87,9 @@ export default {
 
     todoChanged(text) {
       this.$store.commit("issue/todoChanged", text)
+    },
+    addNewTodo() {
+      this.$store.dispatch("issue/addNewIssue", {summary: this.todo.title})
     }
   }
 }
