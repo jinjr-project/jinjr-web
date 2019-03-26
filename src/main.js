@@ -10,6 +10,9 @@ import Registration from './components/user/Registration.vue'
 import NewSite from './components/site/NewSite'
 import Collaboration from './components/collaboration/Collaboration'
 
+import axios from "axios"
+axios.defaults.baseURL = `http://${process.env.VUE_APP_API_HOST}`;
+
 Vue.config.productionTip = false
 Vue.use(Router)
 Vue.use(Vuex)

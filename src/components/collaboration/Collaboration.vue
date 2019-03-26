@@ -29,9 +29,9 @@
               <h2>{{sprint.name}}</h2>
               <div>冲刺描述</div>
           </div>
-          <el-table :data="sprint.stories" :border="true" :show-header="false" size="mini">
+          <el-table :data="sprint.issues" :border="true" :show-header="false" size="mini">
             <el-table-column
-              prop="title"
+              prop="summary"
               label="标题"
               width="*">
             </el-table-column>
@@ -49,7 +49,7 @@
           <div>
             <span @click="showTodoWriter()" v-if="!todo.visible">+ 创建事务</span>
             <div v-if="todo.visible">
-              <el-input border="false" :value="todo.title" @input="todoChanged"><el-button slot="suffix" @click="addNewTodo">创建</el-button></el-input>
+              <el-input border="false" :value="todo.title" @input="todoChanged"><el-button slot="suffix" @click="addNewTodo(sprint)">创建</el-button></el-input>
             </div>
           </div>
         </div>
@@ -88,8 +88,8 @@ export default {
     todoChanged(text) {
       this.$store.commit("issue/todoChanged", text)
     },
-    addNewTodo() {
-      this.$store.dispatch("issue/addNewIssue", {summary: this.todo.title})
+    addNewTodo(sprint) {
+      this.$store.dispatch("issue/addNewIssue", {sprint: sprint, summary: this.todo.title})
     }
   }
 }

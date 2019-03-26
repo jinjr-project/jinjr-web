@@ -1,5 +1,4 @@
-import mock from "./issue_mock"
-import axios from "axios"
+import client from "./client"
 
 const state = {
   todo: {
@@ -14,20 +13,24 @@ const getters = {
 
 const actions = {
   async loadIssues(state) {
-    mock.sprints.forEach(sprint => {
-      sprint.isTodo = false
-    })
-    mock.sprints.push({
-      name: "待办列表",
-      stories: []
-    })
-    state.commit("setIssues", mock.sprints)
+    let sprints = await client.loadSprints()
+    state.commit("setIssues", sprints)
   },
 
   async addNewIssue(state, issue) {
-    let response = await axios.post(`http://${process.env.VUE_APP_API_HOST}/issue`, issue)
-    state.commit('addIssue', response.data)
+    let created = await client.createIssueToSprint(issue.sprint.id, issue.summary)
+    state.commit('addIssue', { sprint: issue.sprint, issue: created })
   }
+}
+
+function findSprintById(state, id) {
+  for (let sprint of state.sprints) {
+    if (sprint.id == id) {
+      return sprint
+    }
+  }
+
+  return null
 }
 
 const mutations = {
@@ -41,13 +44,18 @@ const mutations = {
 
   setIssues(state, sprints) {
     state.sprints = sprints
+  },
+
+  addIssue(state, issue) {
+    let sprint = findSprintById(state, issue.sprint.id)
+    sprint.issues.push(issue.issue)
   }
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
-  }
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
+}
