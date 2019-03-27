@@ -18,7 +18,8 @@ Vue.use(Router)
 Vue.use(Vuex)
 
 const routes = [
-  { path: '/', name: 'login', component: Login },
+  { path: '/', component: Collaboration },
+  // { path: '/', name: 'login', component: Login },
   { path: '/user/registration', name: 'registration', component: Registration },
   { path: '/site/new', name: 'NewSite', component: NewSite },
   { path: '/collaboration', name: 'Collaboration', component: Collaboration }

@@ -5,6 +5,10 @@ const state = {
     visible: false,
     title: ""
   },
+  detail: {
+    summary: "",
+    summaryEditing: false
+  },
   sprints: []
 }
 
@@ -20,6 +24,17 @@ const actions = {
   async addNewIssue(state, issue) {
     let created = await client.createIssueToSprint(issue.sprint.id, issue.summary)
     state.commit('addIssue', { sprint: issue.sprint, issue: created })
+  },
+
+  async openIssueDetail(state, issue) {
+    console.log("action openIssueDetail")
+    state.commit('openIssueDetail', issue)
+  },
+
+  async detailSummaryCommit(state) {
+    let detail = state.state.detail;
+    let issue = await client.issueSummaryChange(detail.id, detail.summary)
+    state.commit('summaryCommited', {})
   }
 }
 
@@ -49,6 +64,15 @@ const mutations = {
   addIssue(state, issue) {
     let sprint = findSprintById(state, issue.sprint.id)
     sprint.issues.push(issue.issue)
+  },
+
+  openIssueDetail(state, issue) {
+    console.log("mutation openIssueDetail")
+    state.detail = issue
+  },
+
+  detailSummaryChanged(state, text) {
+    state.detail.summary = text
   }
 }
 
