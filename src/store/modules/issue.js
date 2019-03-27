@@ -9,6 +9,9 @@ const state = {
     summary: "",
     summaryEditing: false
   },
+  sourceDetail: {
+
+  },
   sprints: []
 }
 
@@ -33,7 +36,7 @@ const actions = {
 
   async detailSummaryCommit(state) {
     let detail = state.state.detail;
-    let issue = await client.issueSummaryChange(detail.id, detail.summary)
+    await client.issueSummaryChange(detail.id, detail.summary)
     state.commit('summaryCommited', {})
   }
 }
@@ -68,11 +71,16 @@ const mutations = {
 
   openIssueDetail(state, issue) {
     console.log("mutation openIssueDetail")
-    state.detail = issue
+    state.detail = Object.assign({}, issue)
+    state.sourceDetail = issue
   },
 
   detailSummaryChanged(state, text) {
     state.detail.summary = text
+  },
+
+  summaryCommited(state) {
+    state.sourceDetail.summary = state.detail.summary
   }
 }
 
