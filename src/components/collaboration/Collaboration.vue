@@ -58,6 +58,7 @@
             <el-col :span="8">
               <!-- <h1 v-if="!detail.summaryEditing">{{detail.summary}}</h1> -->
               <el-input :value="detail.summary" @input="detailSummaryChanged" @keyup.enter.native="onDetailSummaryEnter"></el-input>
+              <jj-progress v-bind:value="20"></jj-progress>
             </el-col>
           </el-row>
         </div>
@@ -67,9 +68,15 @@
 
 </template>
 <style scoped>
+  jj-progress {
+    width: 100%;
+    height: 25px;
+  }
 </style>
 <script>
 import { mapState/*, mapActions*/ } from 'vuex'
+
+import Progress from './Progress'
 
 export default {
   data() {
@@ -112,6 +119,10 @@ export default {
     onDetailSummaryEnter(e) {
       this.$store.dispatch("issue/detailSummaryCommit", {})
     }
+  },
+
+  components: {
+    'jj-progress': Progress
   }
 }
 </script>
