@@ -12,7 +12,10 @@ const state = {
   sourceDetail: {
 
   },
-  sprints: []
+  sprints: [],
+  worklog: {
+    dialogVisible: true
+  }
 }
 
 const getters = {

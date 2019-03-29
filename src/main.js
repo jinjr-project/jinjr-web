@@ -13,9 +13,12 @@ import Collaboration from './components/collaboration/Collaboration'
 import axios from "axios"
 axios.defaults.baseURL = `http://${process.env.VUE_APP_API_HOST}`;
 
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
 Vue.config.productionTip = false
 Vue.use(Router)
 Vue.use(Vuex)
+Vue.use(CKEditor)
 
 const routes = [
   { path: '/', component: Collaboration },

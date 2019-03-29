@@ -1,5 +1,61 @@
 <template>
   <div>
+
+    <el-dialog
+      title="时间跟踪"
+      :visible.sync="worklog.dialogVisible"
+      width="50%"
+      :before-close="handleClose">
+      <div>
+        <jj-progress v-bind:value="20"></jj-progress>
+        <el-row>
+          <el-row :gutter="10">
+            <el-col :span="12">
+              <h5>记录时间</h5>
+              <el-input placeholder="例如，3w 1d 12m"/>
+            </el-col>
+            <el-col :span="12">
+              <h5>剩余时间</h5>
+              <el-input/>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="24">
+              <h5>开始时间</h5>
+            </el-col>
+            <el-col :span="12">
+              <el-date-picker
+                class="full-width"
+                type="date"
+                placeholder="选择日期">
+              </el-date-picker>
+            </el-col>
+            <el-col :span="12">
+              <el-time-select
+                class="full-width"
+                  :picker-options="{
+                    start: '08:30',
+                    step: '00:15',
+                    end: '18:30'
+                  }"
+                  placeholder="选择时间">
+                </el-time-select>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+
+            </el-col>
+          </el-row>
+        </el-row>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">保存</el-button>
+      </span>
+    </el-dialog>
+
     <el-row type="flex">
       <el-col :span="24">
         <el-breadcrumb separator="/">
@@ -72,24 +128,36 @@
     width: 100%;
     height: 25px;
   }
+
+  /* full-width {
+    width: 10%;
+  } */
 </style>
 <script>
 import { mapState/*, mapActions*/ } from 'vuex'
 
 import Progress from './Progress'
+import CKEditor from '@ckeditor/ckeditor5-vue'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
 export default {
   data() {
     return {
       filters: {
         search: ''
+      },
+      editor: ClassicEditor,
+        editorData: '<p>Rich-text editor content.</p>',
+        editorConfig: {
+            // The configuration of the rich-text editor.
       }
     }
   },
   computed: mapState({
     todo: state => state.issue.todo,
     sprints: state => state.issue.sprints,
-    detail: state => state.issue.detail
+    detail: state => state.issue.detail,
+    worklog: state => state.issue.worklog
   }),
 
   created() {
@@ -122,7 +190,8 @@ export default {
   },
 
   components: {
-    'jj-progress': Progress
+    'jj-progress': Progress,
+    ckeditor: CKEditor.component
   }
 }
 </script>
