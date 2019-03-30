@@ -14,7 +14,12 @@ const state = {
   },
   sprints: [],
   worklog: {
-    dialogVisible: true
+    dialogVisible: true,
+    issueId: 0,
+    remaining: "",
+    started: null,
+    ended: null,
+    content: ""
   }
 }
 

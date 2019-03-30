@@ -12,6 +12,14 @@ export default {
     value: {
       type: Number,
       default: 10
+    },
+    passed: {
+      type: Number,
+      default: 10
+    },
+    remaining: {
+      type: Number,
+      default: 10
     }
   },
   data() {
@@ -21,10 +29,20 @@ export default {
   computed: {
     indicatorWidth() {
       return `${this.value}%`;
+    },
+
+    passedDescription() {
+
+    },
+
+    remainingDescription() {
+
     }
   },
   methods: {
-    
+    format(seconds) {
+      
+    }
   }
 }
 </script>
