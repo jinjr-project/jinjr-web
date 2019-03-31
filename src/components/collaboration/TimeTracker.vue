@@ -20,7 +20,7 @@
               <el-date-picker
                 class="full-width"
                 type="date"
-                :value="startedDateBind"
+                v-model="startedDateBind"
                 @change="startedDateChanged"
                 placeholder="选择日期">
               </el-date-picker>
@@ -34,7 +34,7 @@
                     end: '18:30'
                   }"
                 
-                  :value="startedTimeBind"
+                  v-model="startedTimeBind"
                   @change="startedTimeChanged"
                   placeholder="选择时间">
                 </el-time-select>
