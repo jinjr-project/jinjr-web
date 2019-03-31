@@ -16,9 +16,10 @@ const state = {
   worklog: {
     dialogVisible: true,
     issueId: 0,
+    original: "",
     remaining: "",
-    started: null,
-    ended: null,
+    startedDate: null,
+    startedTime: null,
     content: ""
   }
 }
@@ -38,7 +39,6 @@ const actions = {
   },
 
   async openIssueDetail(state, issue) {
-    console.log("action openIssueDetail")
     state.commit('openIssueDetail', issue)
   },
 
@@ -78,7 +78,6 @@ const mutations = {
   },
 
   openIssueDetail(state, issue) {
-    console.log("mutation openIssueDetail")
     state.detail = Object.assign({}, issue)
     state.sourceDetail = issue
   },
@@ -89,6 +88,26 @@ const mutations = {
 
   summaryCommited(state) {
     state.sourceDetail.summary = state.detail.summary
+  },
+
+  timeTrackerRemainingChanged(state, remaining) {
+    state.worklog.remaining  = remaining
+  },
+
+  timeTrackerOriginalChanged(state, original) {
+    state.worklog.original = original
+  },
+
+  timeTrackerStartedDateChanged(state, started) {
+    state.worklog.startedDate = started
+  },
+
+  timeTrackerStartedTimeChanged(state, started) {
+    state.worklog.startedTime = started
+  },
+
+  timeTrackerContentChanged(state, content) {
+    state.worklog.content = content
   }
 }
 

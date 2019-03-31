@@ -5,11 +5,11 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <h5>记录时间</h5>
-              <el-input :value="remainingBind" @input="remainingChanged" placeholder="例如，3w 1d 12m"/>
+              <el-input :value="originalBind" @input="originalChanged" placeholder="例如，3w 1d 12m"/>
             </el-col>
             <el-col :span="12">
               <h5>剩余时间</h5>
-              <el-input/>
+              <el-input :value="remainingBind" @input="remainingChanged"/>
             </el-col>
           </el-row>
           <el-row :gutter="10">
@@ -20,6 +20,8 @@
               <el-date-picker
                 class="full-width"
                 type="date"
+                :value="startedDateBind"
+                @change="startedDateChanged"
                 placeholder="选择日期">
               </el-date-picker>
             </el-col>
@@ -31,13 +33,16 @@
                     step: '00:15',
                     end: '18:30'
                   }"
+                
+                  :value="startedTimeBind"
+                  @change="startedTimeChanged"
                   placeholder="选择时间">
                 </el-time-select>
             </el-col>
           </el-row>
           <el-row>
             <el-col>
-              <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+              <ckeditor :editor="editor" :value="contentBind" :config="editorConfig" @input="contentChanged"></ckeditor>
 
             </el-col>
           </el-row>
@@ -54,17 +59,42 @@ export default {
   data() {
     return {
       editor: ClassicEditor,
-        editorData: '<p>Rich-text editor content.</p>',
-        editorConfig: {
-            // The configuration of the rich-text editor.
+      editorConfig: {
+        // The configuration of the rich-text editor.
       },
       remainingBind: '',
+      originalBind: '',
+      startedDateBind: null,
+      startedTimeBind: '',
+      contentBind: '',
+
+      startedDatePick: {
+        onPick(picker) {
+          debugger
+        }
+      }
     }
   },
   props: {
     remaining: {
       type: String,
       default: ""
+    },
+    original: {
+      type: String,
+      default: ""
+    },
+    startedDate: {
+      type: Date,
+      default: null
+    },
+    startedTime: {
+      type: String,
+      default: null
+    },
+    content: {
+      type: String,
+      default: ''
     }
   },
   components: {
@@ -79,7 +109,27 @@ export default {
   methods: {
     remainingChanged(text) {
       this.remainingBind = text
+      this.$emit('remaining', text)
+    },
+    originalChanged(text) {
+      this.originalBind = text
+      this.$emit('originalChanged', text)
+    },
+    startedDateChanged(date) {
+      this.startedDateBind = date
+      this.$emit('startedDateChanged', date)
+    },
+    startedTimeChanged(text) {
+      this.startedTimeBind = text 
+      this.$emit('startedTimeChanged', text)
+    },
+    contentChanged(text) {
+      this.contentBind = text
+      this.$emit('contentChanged', text)
     }
+  },
+  mounted() {
+    this.remainingBind =  this.remaining
   }
 }
 </script>

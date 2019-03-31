@@ -10,3 +10,5 @@ script:
   - npm run build
   - ls -la
   - aws s3 cp ./dist s3://www.thejinjr.com/ --recursive --acl public-read
+
+  if: branch = master

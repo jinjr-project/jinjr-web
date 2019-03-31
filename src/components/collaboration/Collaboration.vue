@@ -5,12 +5,25 @@
       title="时间跟踪"
       :visible.sync="worklog.dialogVisible"
       width="50%"
-      :before-close="handleClose">
+      :before-close="onCloseTimeTracker">
       
-      <jj-time-tracker :remaining="worklog.remaining"></jj-time-tracker>
+      <jj-time-tracker 
+        :remaining="worklog.remaining"
+        @remaining="timeTrackerRemainingChanged"
+        :original="worklog.original"
+        @originalChanged="timeTrackerOriginalChanged"
+        :startedDate="worklog.startedDate"
+        @startedDateChanged="timeTrackerStartedDateChanged"
+        :startedTime="worklog.startedTime"
+        @startedTimeChanged="timeTrackerStartedTimeChanged"
+        :content="worklog.content"
+        @contentChanged="timeTrackerContentChanged"
+      >
+      </jj-time-tracker>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">保存</el-button>
+        <el-button type="primary" @click="onClickSaveTimeTracker">保存</el-button>
       </span>
     </el-dialog>
 
@@ -139,6 +152,38 @@ export default {
 
     onDetailSummaryEnter(e) {
       this.$store.dispatch("issue/detailSummaryCommit", {})
+    },
+
+    onClickSaveTimeTracker() {
+      console.debug(this.worklog.remaining)
+    },
+
+    onCloseTimeTracker() {
+
+    },
+
+    timeTrackerRemainingChanged(remaining) {
+      this.$store.commit('issue/timeTrackerRemainingChanged', remaining)
+    },
+
+    timeTrackerOriginalChanged(original) {
+      console.debug(`time tracker original changed ${original}`)
+      this.$store.commit('issue/timeTrackerOriginalChanged', original)
+    },
+
+    timeTrackerStartedDateChanged(val) {
+      console.debug(`time tracker started date changed ${val}`)
+      this.$store.commit('issue/timeTrackerStartedDateChanged', val)
+    },
+
+    timeTrackerStartedTimeChanged(val) {
+      console.debug(`time tracker started time changed ${val}`)
+      this.$store.commit('issue/timeTrackerStartedTimeChanged', val)
+    },
+
+    timeTrackerContentChanged(val) {
+      console.debug(`time tracker content changed ${val}`)
+      this.$store.commit('issue/timeTrackerContentChanged', val)
     }
   },
 
