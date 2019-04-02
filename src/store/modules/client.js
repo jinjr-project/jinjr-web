@@ -15,5 +15,19 @@ export default {
 
     async issueStatusChange(issueId, statusId) {
 
+    },
+
+    async addWorklogToIssue(original, remaining, started, content, issueId) {
+        let worklog = {
+            issueId: issueId,
+            original: original,
+            remaining: remaining,
+            started: started,
+            content: content
+        }
+
+        let response = await axios.post(`/issue/${issueId}/worklog`, worklog)
+
+        return response.data
     }
 }

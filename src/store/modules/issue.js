@@ -1,11 +1,16 @@
 import client from "./client"
 
 const state = {
+  layout: {
+    issuesGrid: 24,
+    detailGrid: 8
+  },
   todo: {
     visible: false,
     title: ""
   },
   detail: {
+    visible: false,
     summary: "",
     summaryEditing: false
   },
@@ -14,7 +19,7 @@ const state = {
   },
   sprints: [],
   worklog: {
-    dialogVisible: true,
+    dialogVisible: false,
     issueId: 0,
     original: "",
     remaining: "",
@@ -46,6 +51,14 @@ const actions = {
     let detail = state.state.detail;
     await client.issueSummaryChange(detail.id, detail.summary)
     state.commit('summaryCommited', {})
+  },
+
+  async addWorklogToIssue(state) {
+    let request = state.worklog
+    let worklog = await client.addWorklogToIssue(request.original, 
+      request.remaining, request.content, request.issueId)
+
+    state.commit('worklogAdded', worklog)
   }
 }
 
@@ -78,8 +91,13 @@ const mutations = {
   },
 
   openIssueDetail(state, issue) {
+    console.debug("open issue detail")
     state.detail = Object.assign({}, issue)
     state.sourceDetail = issue
+
+    state.layout.issuesGrid = 16
+    state.layout.detailGrid = 8
+    state.detail.visible = true
   },
 
   detailSummaryChanged(state, text) {
@@ -88,6 +106,18 @@ const mutations = {
 
   summaryCommited(state) {
     state.sourceDetail.summary = state.detail.summary
+  },
+
+  worklogAdded(state, worklog) {
+    state.worklog = {
+      dialogVisible: state.worklog.dialogVisible,
+      issueId: state.worklog.issueId,
+      original: "",
+      remaining: "",
+      startedDate: null,
+      startedTime: null,
+      content: ""
+    }
   },
 
   timeTrackerRemainingChanged(state, remaining) {
@@ -104,6 +134,14 @@ const mutations = {
 
   timeTrackerStartedTimeChanged(state, started) {
     state.worklog.startedTime = started
+  },
+
+  timerTrackerClose(state) {
+    state.worklog.dialogVisible = false
+  },
+
+  timerTrackerVisible(state, visible) {
+    state.worklog.dialogVisible = visible
   },
 
   timeTrackerContentChanged(state, content) {

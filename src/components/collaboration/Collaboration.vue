@@ -4,7 +4,7 @@
     <el-dialog
       title="时间跟踪"
       :visible.sync="worklog.dialogVisible"
-      width="50%"
+      width="35%"
       :before-close="onCloseTimeTracker">
       
       <jj-time-tracker 
@@ -22,8 +22,8 @@
       </jj-time-tracker>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="onClickSaveTimeTracker">保存</el-button>
+        <el-button @click="dialogVisible = false" size="small">取消</el-button>
+        <el-button type="primary" @click="onClickSaveTimeTracker" size="small">保存</el-button>
       </span>
     </el-dialog>
 
@@ -57,7 +57,7 @@
               <div>冲刺描述</div>
           </div>
           <el-row>
-            <el-col :span="16">
+            <el-col :span="layout.issuesGrid">
               <el-table :data="sprint.issues" :border="true" :show-header="false" size="mini" @row-click="openIssueDetail">
                 <el-table-column
                   prop="summary"
@@ -82,10 +82,14 @@
                 </div>
               </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="layout.detailGrid" v-if="detail.visible">
               <!-- <h1 v-if="!detail.summaryEditing">{{detail.summary}}</h1> -->
               <el-input :value="detail.summary" @input="detailSummaryChanged" @keyup.enter.native="onDetailSummaryEnter"></el-input>
-              <jj-progress v-bind:value="20"></jj-progress>
+              
+              <div>
+                <h5>时间跟踪</h5>
+              <jj-progress v-bind:value="20" @click.native="openTimeTracker()"></jj-progress>
+              </div>
             </el-col>
           </el-row>
         </div>
@@ -98,6 +102,10 @@
   jj-progress {
     width: 100%;
     height: 25px;
+  }
+
+  h5 {
+    margin: 10px;
   }
 
   /* full-width {
@@ -116,14 +124,16 @@ export default {
       filters: {
         search: ''
       },
-      remaining: ""
+      remaining: "",
+      a: 16
     }
   },
   computed: mapState({
     todo: state => state.issue.todo,
     sprints: state => state.issue.sprints,
     detail: state => state.issue.detail,
-    worklog: state => state.issue.worklog
+    worklog: state => state.issue.worklog,
+    layout: state => state.issue.layout
   }),
 
   created() {
@@ -159,7 +169,12 @@ export default {
     },
 
     onCloseTimeTracker() {
+      this.$store.commit('issue/timerTrackerVisible', false);
+    },
 
+    openTimeTracker() {
+      console.debug('open time tracker')
+      this.$store.commit('issue/timerTrackerVisible', true);
     },
 
     timeTrackerRemainingChanged(remaining) {

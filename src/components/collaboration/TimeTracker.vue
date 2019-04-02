@@ -41,9 +41,9 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col><h5>工作描述</h5></el-col>
             <el-col>
               <ckeditor :editor="editor" :value="contentBind" :config="editorConfig" @input="contentChanged"></ckeditor>
-
             </el-col>
           </el-row>
         </el-row>
