@@ -181,7 +181,7 @@ export default {
     },
 
     onIssueSummaryEnter(e) {
-      this.$store.dispatch("issue/detailSummaryCommit", {})
+      this.$store.dispatch("issue/changeIssueSummary", {})
     },
 
     onClickSaveTimeTracker() {

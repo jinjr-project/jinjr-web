@@ -51,9 +51,10 @@ const actions = {
   },
 
   async loadIssueDetail(state, issue) {
+    let loadedIssue = await client.loadIssue(issue.id)
     let issueStatuses = await client.loadIssueStatuses()
     state.commit("setIssueStatuses", issueStatuses)
-    state.commit('setIssueDetail', issue)
+    state.commit('setIssueDetail', loadedIssue)
   },
 
   async changeIssueSummary(state) {

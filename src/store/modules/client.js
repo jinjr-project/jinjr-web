@@ -9,6 +9,10 @@ export default {
         return (await axios.get("/sprint")).data
     },
 
+    async loadIssue(id) {
+      return (await axios.get(`/issue/${id}`)).data
+    },
+
     async loadIssueStatuses() {
         return (await axios.get("/issue/status")).data
     },
