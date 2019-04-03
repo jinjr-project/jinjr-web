@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <el-dialog
       title="时间跟踪"
       :visible.sync="worklog.dialogVisible"
@@ -84,8 +83,18 @@
             </el-col>
             <el-col :span="layout.detailGrid" v-if="detail.visible">
               <!-- <h1 v-if="!detail.summaryEditing">{{detail.summary}}</h1> -->
-              <el-input :value="detail.summary" @input="detailSummaryChanged" @keyup.enter.native="onDetailSummaryEnter"></el-input>
-              
+              <el-input :value="detail.summary" @input="onIssueSummaryChanged" @keyup.enter.native="onIssueSummaryEnter"></el-input>
+              <div>
+                <h5>状态</h5>
+                <el-select v-bind:value="detail.status.name" @change="issueStatusChanged" size="small">
+                  <el-option
+                    v-for="issueStatus in selectableStatuses"
+                    :key="issueStatus.id"
+                    :label="issueStatus.name"
+                    :value="issueStatus.id">
+                  </el-option>
+                </el-select>
+              </div>
               <div>
                 <h5>时间跟踪</h5>
               <jj-progress v-bind:value="20" @click.native="openTimeTracker()"></jj-progress>
@@ -113,7 +122,8 @@
   } */
 </style>
 <script>
-import { mapState/*, mapActions*/ } from 'vuex'
+import { mapState,/*, mapActions*/ 
+mapGetters} from 'vuex'
 
 import Progress from './Progress'
 import TimeTracker from './TimeTracker'
@@ -133,7 +143,12 @@ export default {
     sprints: state => state.issue.sprints,
     detail: state => state.issue.detail,
     worklog: state => state.issue.worklog,
-    layout: state => state.issue.layout
+    layout: state => state.issue.layout,
+    statuses: state => state.issue.statuses,
+
+    ...mapGetters('issue', {
+      selectableStatuses: 'selectableStatuses'
+    })
   }),
 
   created() {
@@ -153,19 +168,24 @@ export default {
     },
 
     openIssueDetail(row) {
-      this.$store.dispatch("issue/openIssueDetail", row)
+      this.$store.dispatch("issue/loadIssueDetail", row)
     },
 
-    detailSummaryChanged(text) {
-      this.$store.commit("issue/detailSummaryChanged", text)
+    issueStatusChanged(issueStatusId) {
+      window.console.debug(`Collaboration.vue: issue status changed [${issueStatusId}]`)
+      this.$store.dispatch("issue/issueStatusChanged", issueStatusId)
     },
 
-    onDetailSummaryEnter(e) {
+    onIssueSummaryChanged(summary) {
+      this.$store.commit("issue/setIssueSummary", summary)
+    },
+
+    onIssueSummaryEnter(e) {
       this.$store.dispatch("issue/detailSummaryCommit", {})
     },
 
     onClickSaveTimeTracker() {
-      console.debug(this.worklog.remaining)
+      window.console.debug(this.worklog.remaining)
     },
 
     onCloseTimeTracker() {
@@ -173,7 +193,7 @@ export default {
     },
 
     openTimeTracker() {
-      console.debug('open time tracker')
+      window.console.debug('open time tracker')
       this.$store.commit('issue/timerTrackerVisible', true);
     },
 
@@ -182,22 +202,22 @@ export default {
     },
 
     timeTrackerOriginalChanged(original) {
-      console.debug(`time tracker original changed ${original}`)
+      window.console.debug(`time tracker original changed ${original}`)
       this.$store.commit('issue/timeTrackerOriginalChanged', original)
     },
 
     timeTrackerStartedDateChanged(val) {
-      console.debug(`time tracker started date changed ${val}`)
+      window.console.debug(`time tracker started date changed ${val}`)
       this.$store.commit('issue/timeTrackerStartedDateChanged', val)
     },
 
     timeTrackerStartedTimeChanged(val) {
-      console.debug(`time tracker started time changed ${val}`)
+      window.console.debug(`time tracker started time changed ${val}`)
       this.$store.commit('issue/timeTrackerStartedTimeChanged', val)
     },
 
     timeTrackerContentChanged(val) {
-      console.debug(`time tracker content changed ${val}`)
+      window.console.debug(`time tracker content changed ${val}`)
       this.$store.commit('issue/timeTrackerContentChanged', val)
     }
   },

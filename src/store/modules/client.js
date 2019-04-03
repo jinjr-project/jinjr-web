@@ -1,8 +1,16 @@
 import axios from "axios"
-
+const config = {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+}
 export default {
     async loadSprints() {
         return (await axios.get("/sprint")).data
+    },
+
+    async loadIssueStatuses() {
+        return (await axios.get("/issue/status")).data
     },
 
     async createIssueToSprint(sprintId, summary) {
@@ -14,7 +22,8 @@ export default {
     },
 
     async issueStatusChange(issueId, statusId) {
-
+      return (await axios.put(`/issue/${issueId}/status`, `status_id=${statusId}`, config)
+        ).data
     },
 
     async addWorklogToIssue(original, remaining, started, content, issueId) {

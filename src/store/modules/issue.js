@@ -26,10 +26,17 @@ const state = {
     startedDate: null,
     startedTime: null,
     content: ""
-  }
+  },
+  statuses: []
 }
 
 const getters = {
+  selectableStatuses: state => {
+    // let issueStatus = state.detail.status
+    // let issueStatues = state.statuses.filter((status) => issueStatus && issueStatus.id != status.id)
+    let statuses = state.statuses
+    return statuses
+  }
 }
 
 const actions = {
@@ -43,11 +50,13 @@ const actions = {
     state.commit('addIssue', { sprint: issue.sprint, issue: created })
   },
 
-  async openIssueDetail(state, issue) {
-    state.commit('openIssueDetail', issue)
+  async loadIssueDetail(state, issue) {
+    let issueStatuses = await client.loadIssueStatuses()
+    state.commit("setIssueStatuses", issueStatuses)
+    state.commit('setIssueDetail', issue)
   },
 
-  async detailSummaryCommit(state) {
+  async changeIssueSummary(state) {
     let detail = state.state.detail;
     await client.issueSummaryChange(detail.id, detail.summary)
     state.commit('summaryCommited', {})
@@ -59,6 +68,11 @@ const actions = {
       request.remaining, request.content, request.issueId)
 
     state.commit('worklogAdded', worklog)
+  },
+
+  async issueStatusChanged(state, issueStatusId) {
+    let response = client.issueStatusChange(state.state.detail.id, issueStatusId)
+    state.commit('issueStatusChangeById', issueStatusId)
   }
 }
 
@@ -85,30 +99,43 @@ const mutations = {
     state.sprints = sprints
   },
 
+  setIssueStatuses(state, issueStatuses) {
+    state.statuses = issueStatuses
+  },
+
   addIssue(state, issue) {
     let sprint = findSprintById(state, issue.sprint.id)
     sprint.issues.push(issue.issue)
   },
 
-  openIssueDetail(state, issue) {
-    console.debug("open issue detail")
-    state.detail = Object.assign({}, issue)
-    state.sourceDetail = issue
+  setIssueDetail(state, issueDetail) {
+    state.detail = Object.assign({}, issueDetail)
+    state.sourceDetail = issueDetail
 
     state.layout.issuesGrid = 16
     state.layout.detailGrid = 8
     state.detail.visible = true
   },
 
-  detailSummaryChanged(state, text) {
-    state.detail.summary = text
+  issueStatusChangeById(state, issueStatusId) {
+    window.console.debug("issue.mutations.issueStatusChangeById")
+    for (let status of state.statuses) {
+      if (issueStatusId == status.id) {
+        state.detail.status = status
+        break
+      }
+    }
+  },
+
+  setIssueSummary(state, summary) {
+    state.detail.summary = summary
   },
 
   summaryCommited(state) {
     state.sourceDetail.summary = state.detail.summary
   },
 
-  worklogAdded(state, worklog) {
+  worklogAdded(state) {
     state.worklog = {
       dialogVisible: state.worklog.dialogVisible,
       issueId: state.worklog.issueId,
