@@ -1,4 +1,5 @@
 import client from "./client"
+import moment from 'moment'
 
 const state = {
   layout: {
@@ -21,10 +22,9 @@ const state = {
   worklog: {
     dialogVisible: false,
     issueId: 0,
-    original: "",
+    spent: "",
     remaining: "",
-    startedDate: null,
-    startedTime: null,
+    started: null,
     content: ""
   },
   statuses: []
@@ -36,6 +36,15 @@ const getters = {
     // let issueStatues = state.statuses.filter((status) => issueStatus && issueStatus.id != status.id)
     let statuses = state.statuses
     return statuses
+  },
+
+  issueWorklogPercent: state => {
+    let tracking = state.detail.time_tracking;
+    if (!tracking) {
+      return 0;
+    }
+    
+    return tracking.time_spent.seconds / tracking.remaining_estimate.seconds;
   }
 }
 
@@ -63,12 +72,16 @@ const actions = {
     state.commit('summaryCommited', {})
   },
 
-  async addWorklogToIssue(state) {
-    let request = state.worklog
-    let worklog = await client.addWorklogToIssue(request.original, 
-      request.remaining, request.content, request.issueId)
+  async addWorklog(state, command) {
+    // let request = state.state.worklog
+    // request.issueId = state.state.detail.id
+    // debugger
+    let started = moment(command.started).format("YYYY-MM-DD[T]HH:mm:ss")
+    debugger
+    let worklog = await client.addWorklogToIssue(command.spent,
+      command.remaining, started, command.content, command.issueId)
 
-    state.commit('worklogAdded', worklog)
+    // state.commit('worklogAdded', worklog)
   },
 
   async issueStatusChanged(state, issueStatusId) {
@@ -138,42 +151,47 @@ const mutations = {
 
   worklogAdded(state) {
     state.worklog = {
-      dialogVisible: state.worklog.dialogVisible,
-      issueId: state.worklog.issueId,
+      dialogVisible: false,
+      issueId: 0,
       original: "",
       remaining: "",
       startedDate: null,
       startedTime: null,
       content: ""
     }
+
+    state.dispatch('addWorklog')
   },
 
-  timeTrackerRemainingChanged(state, remaining) {
+  setTimeTrackerRemaining(state, remaining) {
     state.worklog.remaining  = remaining
   },
 
-  timeTrackerOriginalChanged(state, original) {
-    state.worklog.original = original
+  setTimeTrackerSpent(state, spent) {
+    state.worklog.spent = spent
   },
 
-  timeTrackerStartedDateChanged(state, started) {
-    state.worklog.startedDate = started
+  setTimeTrackerStarted(state, started) {
+    state.worklog.started = started
   },
 
-  timeTrackerStartedTimeChanged(state, started) {
-    state.worklog.startedTime = started
-  },
-
-  timerTrackerClose(state) {
-    state.worklog.dialogVisible = false
-  },
-
-  timerTrackerVisible(state, visible) {
+  setTimerTrackerVisible(state, visible) {
     state.worklog.dialogVisible = visible
   },
 
-  timeTrackerContentChanged(state, content) {
+  setTimeTrackerContent(state, content) {
     state.worklog.content = content
+  },
+
+  emptyWorklog(state) {
+    state.worklog = {
+      dialogVisible: false,
+      issueId: 0,
+      spent: "",
+      remaining: "",
+      started: (new Date()).toString(),
+      content: ""
+    }
   }
 }
 

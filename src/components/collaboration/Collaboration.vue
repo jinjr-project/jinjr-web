@@ -8,13 +8,11 @@
       
       <jj-time-tracker 
         :remaining="worklog.remaining"
-        @remaining="timeTrackerRemainingChanged"
-        :original="worklog.original"
-        @originalChanged="timeTrackerOriginalChanged"
-        :startedDate="worklog.startedDate"
-        @startedDateChanged="timeTrackerStartedDateChanged"
-        :startedTime="worklog.startedTime"
-        @startedTimeChanged="timeTrackerStartedTimeChanged"
+        @remainingChanged="timeTrackerRemainingChanged"
+        :spent="worklog.spent"
+        @spentChanged="timeTrackerSpentChanged"
+        :started="worklog.started"
+        @startedChanged="timeTrackerStartedChanged"
         :content="worklog.content"
         @contentChanged="timeTrackerContentChanged"
       >
@@ -97,7 +95,11 @@
               </div>
               <div>
                 <h5>时间跟踪</h5>
-              <jj-progress v-bind:value="20" @click.native="openTimeTracker()"></jj-progress>
+                <jj-progress 
+                  v-bind:value="issueWorklogPercent"
+                  :time-tracking="detail.time_tracking"
+                  @click.native="openTimeTracker()">
+                </jj-progress>
               </div>
             </el-col>
           </el-row>
@@ -147,7 +149,8 @@ export default {
     statuses: state => state.issue.statuses,
 
     ...mapGetters('issue', {
-      selectableStatuses: 'selectableStatuses'
+      selectableStatuses: 'selectableStatuses',
+      issueWorklogPercent: 'issueWorklogPercent'
     })
   }),
 
@@ -185,40 +188,43 @@ export default {
     },
 
     onClickSaveTimeTracker() {
-      window.console.debug(this.worklog.remaining)
+      debugger
+      this.$store.dispatch("issue/addWorklog", {
+        issueId: this.detail.id,
+        spent: this.worklog.spent,
+        remaining: this.worklog.remaining,
+        content: this.worklog.content,
+        started: this.worklog.started
+      })
     },
 
     onCloseTimeTracker() {
-      this.$store.commit('issue/timerTrackerVisible', false);
+      this.$store.commit('issue/setTimerTrackerVisible', false);
     },
 
     openTimeTracker() {
       window.console.debug('open time tracker')
-      this.$store.commit('issue/timerTrackerVisible', true);
+      this.$store.commit('issue/emptyWorklog');
+      this.$store.commit('issue/setTimerTrackerVisible', true);
     },
 
     timeTrackerRemainingChanged(remaining) {
-      this.$store.commit('issue/timeTrackerRemainingChanged', remaining)
+      this.$store.commit('issue/setTimeTrackerRemaining', remaining)
     },
 
-    timeTrackerOriginalChanged(original) {
-      window.console.debug(`time tracker original changed ${original}`)
-      this.$store.commit('issue/timeTrackerOriginalChanged', original)
+    timeTrackerSpentChanged(spent) {
+      window.console.debug(`time tracker spent changed ${spent}`)
+      this.$store.commit('issue/setTimeTrackerSpent', spent)
     },
 
-    timeTrackerStartedDateChanged(val) {
-      window.console.debug(`time tracker started date changed ${val}`)
-      this.$store.commit('issue/timeTrackerStartedDateChanged', val)
-    },
-
-    timeTrackerStartedTimeChanged(val) {
-      window.console.debug(`time tracker started time changed ${val}`)
-      this.$store.commit('issue/timeTrackerStartedTimeChanged', val)
+    timeTrackerStartedChanged(val) {
+      window.console.debug(`time tracker started changed ${val}`)
+      this.$store.commit('issue/setTimeTrackerStarted', val)
     },
 
     timeTrackerContentChanged(val) {
       window.console.debug(`time tracker content changed ${val}`)
-      this.$store.commit('issue/timeTrackerContentChanged', val)
+      this.$store.commit('issue/setTimeTrackerContent', val)
     }
   },
 

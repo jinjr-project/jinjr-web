@@ -30,10 +30,10 @@ export default {
         ).data
     },
 
-    async addWorklogToIssue(original, remaining, started, content, issueId) {
+    async addWorklogToIssue(spent, remaining, started, content, issueId) {
         let worklog = {
             issueId: issueId,
-            original: original,
+            spent: spent,
             remaining: remaining,
             started: started,
             content: content

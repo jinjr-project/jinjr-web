@@ -5,45 +5,31 @@
           <el-row :gutter="10">
             <el-col :span="12">
               <h5>记录时间</h5>
-              <el-input :value="originalBind" @input="originalChanged" placeholder="例如，3w 1d 12m"/>
+              <el-input :value="spentLocal" @input="spentChanged" placeholder="例如，3w 1d 12m"/>
             </el-col>
             <el-col :span="12">
               <h5>剩余时间</h5>
-              <el-input :value="remainingBind" @input="remainingChanged"/>
+              <el-input :value="remainingLocal" @input="remainingChanged"/>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="24">
               <h5>开始时间</h5>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-date-picker
                 class="full-width"
-                type="date"
-                v-model="startedDateBind"
-                @change="startedDateChanged"
+                type="datetime"
+                v-model="startedLocal"
+                @change="startedChanged"
                 placeholder="选择日期">
               </el-date-picker>
-            </el-col>
-            <el-col :span="12">
-              <el-time-select
-                class="full-width"
-                  :picker-options="{
-                    start: '08:30',
-                    step: '00:15',
-                    end: '18:30'
-                  }"
-                
-                  v-model="startedTimeBind"
-                  @change="startedTimeChanged"
-                  placeholder="选择时间">
-                </el-time-select>
             </el-col>
           </el-row>
           <el-row>
             <el-col><h5>工作描述</h5></el-col>
             <el-col>
-              <ckeditor :editor="editor" :value="contentBind" :config="editorConfig" @input="contentChanged"></ckeditor>
+              <ckeditor :editor="editor" :value="contentLocal" :config="editorConfig" @input="contentChanged"></ckeditor>
             </el-col>
           </el-row>
         </el-row>
@@ -62,35 +48,24 @@ export default {
       editorConfig: {
         // The configuration of the rich-text editor.
       },
-      remainingBind: '',
-      originalBind: '',
-      startedDateBind: null,
-      startedTimeBind: '',
-      contentBind: '',
-
-      startedDatePick: {
-        onPick(picker) {
-          debugger
-        }
-      }
+      remainingLocal: '',
+      spentLocal: '',
+      startedLocal: new Date(),
+      contentLocal: '',
     }
   },
   props: {
+    spent: {
+      type: String,
+      default: ""
+    },
     remaining: {
       type: String,
       default: ""
     },
-    original: {
+    started: {
       type: String,
-      default: ""
-    },
-    startedDate: {
-      type: Date,
-      default: null
-    },
-    startedTime: {
-      type: String,
-      default: null
+      default: (new Date()).toString()
     },
     content: {
       type: String,
@@ -103,31 +78,30 @@ export default {
   },
   watch: {
     remaining(val) {
-      this.remainingBind = val
+      this.remainingLocal = val
     }
   },
   methods: {
-    remainingChanged(text) {
-      this.remainingBind = text
-      this.$emit('remaining', text)
+    remainingChanged(remaining) {
+      this.remainingLocal = remaining
+      this.$emit('remainingChanged', remaining)
     },
-    originalChanged(text) {
-      this.originalBind = text
-      this.$emit('originalChanged', text)
+
+    spentChanged(spent) {
+      this.spentLocal = spent
+      this.$emit('spentChanged', spent)
     },
-    startedDateChanged(date) {
+    startedChanged(date) {
       this.startedDateBind = date
-      this.$emit('startedDateChanged', date)
+      this.$emit('startedChanged', date)
     },
-    startedTimeChanged(text) {
-      this.startedTimeBind = text 
-      this.$emit('startedTimeChanged', text)
-    },
-    contentChanged(text) {
-      this.contentBind = text
-      this.$emit('contentChanged', text)
+
+    contentChanged(content) {
+      this.contentLocal = content
+      this.$emit('contentChanged', content)
     }
   },
+
   mounted() {
     this.remainingBind =  this.remaining
   }
