@@ -53,19 +53,8 @@ export default {
     indicatorWidth() {
       return `${this.value}%`;
     },
-
-    passedDescription() {
-
-    },
-
-    remainingDescription() {
-
-    }
   },
   methods: {
-    format(seconds) {
-      
-    }
   },
   watch: {
     timeTracking: (old, timeTracking) => {

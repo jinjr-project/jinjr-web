@@ -82,7 +82,7 @@ const actions = {
   },
 
   async issueStatusChanged(state, issueStatusId) {
-    let response = client.issueStatusChange(state.state.detail.id, issueStatusId)
+    await client.issueStatusChange(state.state.detail.id, issueStatusId)
     state.commit('issueStatusChangeById', issueStatusId)
   }
 }
@@ -171,7 +171,7 @@ const mutations = {
   },
 
   initalizeTimeTracking(state, issueId) {
-    console.debug("initalizeTimeTracking")
+    window.console.debug("initalizeTimeTracking")
     state.worklog.issueId = issueId
     state.worklog.spent = ""
     state.worklog.remaining = ""

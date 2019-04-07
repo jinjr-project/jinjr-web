@@ -22,7 +22,7 @@ Vue.use(CKEditor)
 
 const routes = [
   { path: '/', component: Collaboration },
-  // { path: '/', name: 'login', component: Login },
+  { path: '/login', name: 'login', component: Login },
   { path: '/user/registration', name: 'registration', component: Registration },
   { path: '/site/new', name: 'NewSite', component: NewSite },
   { path: '/collaboration', name: 'Collaboration', component: Collaboration }

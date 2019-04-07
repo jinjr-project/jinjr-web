@@ -37,7 +37,6 @@
 </template>
 <script>
 import Progress from './Progress'
-import TimeTracker from './TimeTracker'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
@@ -81,8 +80,6 @@ export default {
       this.remainingLocal = val
     },
     spent(spent) {
-      console.debug("watch spent")
-      console.debug(spent)
       this.spentLocal = spent
     }
   },

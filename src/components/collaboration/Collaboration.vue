@@ -183,7 +183,7 @@ export default {
       this.$store.commit("issue/setIssueSummary", summary)
     },
 
-    onIssueSummaryEnter(e) {
+    onIssueSummaryEnter() {
       this.$store.dispatch("issue/changeIssueSummary", {})
     },
 
