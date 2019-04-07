@@ -44,7 +44,7 @@ const getters = {
       return 0;
     }
     
-    return tracking.time_spent.seconds / tracking.remaining_estimate.seconds;
+    return (tracking.time_spent.seconds / tracking.remaining_estimate.seconds) * 100;
   }
 }
 
@@ -77,7 +77,6 @@ const actions = {
     // request.issueId = state.state.detail.id
     // debugger
     let started = moment(command.started).format("YYYY-MM-DD[T]HH:mm:ss")
-    debugger
     let worklog = await client.addWorklogToIssue(command.spent,
       command.remaining, started, command.content, command.issueId)
 

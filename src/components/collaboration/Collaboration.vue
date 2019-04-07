@@ -188,7 +188,6 @@ export default {
     },
 
     onClickSaveTimeTracker() {
-      debugger
       this.$store.dispatch("issue/addWorklog", {
         issueId: this.detail.id,
         spent: this.worklog.spent,
