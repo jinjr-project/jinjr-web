@@ -1,6 +1,10 @@
 <template>
     <div>
-        <jj-progress v-bind:value="20"></jj-progress>
+        <jj-progress 
+          v-bind:value="progressWidth"
+          :time-tracking="timeTracking">
+        </jj-progress>
+
         <el-row>
           <el-row :gutter="10">
             <el-col :span="12">
@@ -39,6 +43,7 @@
 import Progress from './Progress'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { progressWidthForTimeTracking } from '../../lib/time_tracking'
 
 export default {
   data() {
@@ -69,6 +74,14 @@ export default {
     content: {
       type: String,
       default: ''
+    },
+    timeTracking: {
+      type: Object,
+    }
+  },
+  computed: {
+    progressWidth() {
+      return progressWidthForTimeTracking(this.timeTracking)
     }
   },
   components: {

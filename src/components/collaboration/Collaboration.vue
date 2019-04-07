@@ -15,6 +15,7 @@
         @startedChanged="timeTrackerStartedChanged"
         :content="worklog.content"
         @contentChanged="timeTrackerContentChanged"
+        :time-tracking="detail.time_tracking"
       >
       </jj-time-tracker>
 

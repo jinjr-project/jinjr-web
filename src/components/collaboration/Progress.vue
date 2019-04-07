@@ -8,7 +8,6 @@
         <span v-if="timeTracking.time_spent.seconds > 0">已记录 {{timeTracking.time_spent.expression}}</span>
         <span v-if="timeTracking.remaining_estimate.seconds > 0" style="float: right;">{{timeTracking.remaining_estimate.expression}}</span>
       </div>
-    <!-- <small>已记录时间 剩余时间</small> -->
     </div>
 </template>
 <script>
@@ -16,7 +15,7 @@ export default {
   props: {
     value: {
       type: Number,
-      default: 10
+      default: 0
     },
     passed: {
       type: Number,
@@ -51,15 +50,10 @@ export default {
   },
   computed: {
     indicatorWidth() {
+      if (0 == this.value)
+        return "0%";
       return `${this.value}%`;
     },
-  },
-  methods: {
-  },
-  watch: {
-    timeTracking: (old, timeTracking) => {
-      window.console.debug(timeTracking)
-    }
   }
 }
 </script>

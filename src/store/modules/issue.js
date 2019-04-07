@@ -1,5 +1,6 @@
 import client from "./client"
 import moment from 'moment'
+import { progressWidthForTimeTracking } from '../../lib/time_tracking'
 
 const state = {
   layout: {
@@ -32,19 +33,11 @@ const state = {
 
 const getters = {
   selectableStatuses: state => {
-    // let issueStatus = state.detail.status
-    // let issueStatues = state.statuses.filter((status) => issueStatus && issueStatus.id != status.id)
-    let statuses = state.statuses
-    return statuses
+    return state.statuses
   },
 
   issueWorklogPercent: state => {
-    let tracking = state.detail.time_tracking;
-    if (!tracking) {
-      return 0;
-    }
-    
-    return (tracking.time_spent.seconds / tracking.original_estimate.seconds) * 100;
+    return progressWidthForTimeTracking(state.detail.time_tracking);
   }
 }
 
