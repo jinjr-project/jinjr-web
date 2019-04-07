@@ -44,7 +44,7 @@ const getters = {
       return 0;
     }
     
-    return (tracking.time_spent.seconds / tracking.remaining_estimate.seconds) * 100;
+    return (tracking.time_spent.seconds / tracking.original_estimate.seconds) * 100;
   }
 }
 
@@ -73,14 +73,12 @@ const actions = {
   },
 
   async addWorklog(state, command) {
-    // let request = state.state.worklog
-    // request.issueId = state.state.detail.id
-    // debugger
     let started = moment(command.started).format("YYYY-MM-DD[T]HH:mm:ss")
     let worklog = await client.addWorklogToIssue(command.spent,
       command.remaining, started, command.content, command.issueId)
 
-    // state.commit('worklogAdded', worklog)
+    state.commit('worklogAdded', worklog)
+    await state.dispatch('loadIssueDetail', {id: command.issueId})
   },
 
   async issueStatusChanged(state, issueStatusId) {
@@ -149,17 +147,7 @@ const mutations = {
   },
 
   worklogAdded(state) {
-    state.worklog = {
-      dialogVisible: false,
-      issueId: 0,
-      original: "",
-      remaining: "",
-      startedDate: null,
-      startedTime: null,
-      content: ""
-    }
-
-    state.dispatch('addWorklog')
+    state.worklog.dialogVisible  = false
   },
 
   setTimeTrackerRemaining(state, remaining) {
@@ -182,16 +170,14 @@ const mutations = {
     state.worklog.content = content
   },
 
-  emptyWorklog(state) {
-    state.worklog = {
-      dialogVisible: false,
-      issueId: 0,
-      spent: "",
-      remaining: "",
-      started: (new Date()).toString(),
-      content: ""
-    }
-  }
+  initalizeTimeTracking(state, issueId) {
+    console.debug("initalizeTimeTracking")
+    state.worklog.issueId = issueId
+    state.worklog.spent = ""
+    state.worklog.remaining = ""
+    state.worklog.started = (new Date()).toString()
+    state.worklog.content = ""
+  },
 }
 
 export default {

@@ -7,7 +7,7 @@
           <el-form-item>
             <el-input v-model="registration.email" placeholder="请输入邮件地址"></el-input>
           </el-form-item>
-		  <el-form-item>
+          <el-form-item>
             <el-input v-model="registration.username" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item>
@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-	  register() {
+    register() {
       this.$router.push("/site/new")
     }
   }

@@ -31,6 +31,7 @@ export default {
     },
 
     async addWorklogToIssue(spent, remaining, started, content, issueId) {
+      window.console.debug(`addWorklogToIssue: Spent ${spent}`)
         let worklog = {
             issueId: issueId,
             spent: spent,

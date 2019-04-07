@@ -198,12 +198,13 @@ export default {
     },
 
     onCloseTimeTracker() {
+      window.console.debug("on close time tracker")
       this.$store.commit('issue/setTimerTrackerVisible', false);
     },
 
     openTimeTracker() {
       window.console.debug('open time tracker')
-      this.$store.commit('issue/emptyWorklog');
+      this.$store.commit('issue/initalizeTimeTracking', this.detail.id);
       this.$store.commit('issue/setTimerTrackerVisible', true);
     },
 

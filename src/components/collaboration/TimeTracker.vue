@@ -79,6 +79,11 @@ export default {
   watch: {
     remaining(val) {
       this.remainingLocal = val
+    },
+    spent(spent) {
+      console.debug("watch spent")
+      console.debug(spent)
+      this.spentLocal = spent
     }
   },
   methods: {
