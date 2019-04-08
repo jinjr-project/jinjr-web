@@ -26,15 +26,15 @@
     </el-dialog>
 
     <el-row type="flex">
-      <el-col :span="24">
+      <el-col :span="22" :offset="1">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">项目</el-breadcrumb-item>
           <el-breadcrumb-item><a href="/">Jinjr</a></el-breadcrumb-item>
           <el-breadcrumb-item>Jinjr 面板</el-breadcrumb-item>
         </el-breadcrumb>
       </el-col>
-      
     </el-row>
+    <!--
     <el-row type="flex">
       <el-col :span="24">
         <h1>待办事项列表</h1>
@@ -47,6 +47,7 @@
         </el-input>
       </el-col>
     </el-row>
+    -->
     <el-row type="flex">
       <el-col :span="22" :offset="1">
         <div v-for="sprint in sprints" :key="sprint.name">
@@ -54,7 +55,7 @@
               <h2>{{sprint.name}}</h2>
               <div>冲刺描述</div>
           </div>
-          <el-row>
+          <el-row :gutter="10">
             <el-col :span="layout.issuesGrid">
               <el-table :data="sprint.issues" :border="true" :show-header="false" size="mini" @row-click="openIssueDetail">
                 <el-table-column
@@ -102,6 +103,7 @@
                   @click.native="openTimeTracker()">
                 </jj-progress>
               </div>
+              <jj-activity></jj-activity>
             </el-col>
           </el-row>
         </div>
@@ -130,6 +132,7 @@ mapGetters} from 'vuex'
 
 import Progress from './Progress'
 import TimeTracker from './TimeTracker'
+import Activity from './Activity'
 
 export default {
   data() {
@@ -231,7 +234,8 @@ export default {
 
   components: {
     'jj-progress': Progress,
-    'jj-time-tracker': TimeTracker
+    'jj-time-tracker': TimeTracker,
+    'jj-activity': Activity
   }
 }
 </script>
